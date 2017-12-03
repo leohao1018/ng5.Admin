@@ -1,0 +1,68 @@
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Admin</b>LTE</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">
+      Sign in to start your session
+    </p>
+    <div class="alert alert-warning alert-dismissible" *ngIf="loginErrorMsg">
+      <h5><i class="icon fa fa-warning"></i> {{loginErrorMsg}} </h5>
+    </div>
+
+    <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+      <div class="form-group has-feedback" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+        <label for="txtUsername">Username</label>
+        <input type="text" class="form-control" name="username" id="txtUsername" [(ngModel)]="user.username"
+               #username="ngModel"
+               required/>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
+      </div>
+      <div class="form-group has-feedback" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+        <label for="txtPassword">Password</label>
+        <input type="password" class="form-control" name="password" id="txtPassword" [(ngModel)]="user.password"
+               #password="ngModel"
+               required/>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox" name="remember" (change)="user.remember = !user.remember"
+                     [(ngModel)]="user.remember"> Remember Me 7 Days
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-4">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4 pull-right">
+          <button [disabled]="loading" class="btn btn-primary btn-block btn-flat">Sign In</button>
+        </div>
+        <div class="col-xs-1 pull-right">
+          <img *ngIf="loading"
+               src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+        </div>
+      </div>
+    </form>
+
+    <!--<div class="social-auth-links text-center">-->
+    <!--<p>- OR -</p>-->
+    <!--<a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using-->
+    <!--Facebook</a>-->
+    <!--<a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using-->
+    <!--Google+</a>-->
+    <!--</div>-->
+    <!--<a href="#">I forgot my password</a><br>-->
+    <!--<a href="register.html" class="text-center">Register a new membership</a>-->
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
