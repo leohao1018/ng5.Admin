@@ -27,39 +27,40 @@
           <form class="form-horizontal" name="form" (ngSubmit)="f.form.valid && add()" #f="ngForm" novalidate>
             <div class="box-body">
               <div class="form-group has-feedback col-md-6" [ngClass]="{ 'has-error': f.submitted && !Subject.valid }">
-                <label for="txtSubject" class="col-md-4 control-label">Subject</label>
+                <label for="txtSubject" class="col-md-4 control-label">标题</label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="Subject" id="txtSubject"
                          [(ngModel)]="currentEntity.Subject"
                          #Subject="ngModel"
                          required/>
-                  <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                  <div *ngIf="f.submitted && !Subject.valid" class="help-block">Subject is required</div>
-                </div>
-              </div>
-              <div class="form-group has-feedback col-md-6" [ngClass]="{ 'has-error': f.submitted && !Content.valid }">
-                <label for="txtContent" class="col-md-4 control-label">Content</label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="Content" id="txtContent"
-                         [(ngModel)]="currentEntity.Content"
-                         #Content="ngModel"
-                         required/>
-                  <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                  <div *ngIf="f.submitted && !Content.valid" class="help-block">Content is required</div>
+                  <!--<span class="glyphicon glyphicon-envelope form-control-feedback"></span>-->
+                  <div *ngIf="f.submitted && !Subject.valid" class="help-block">标题必填</div>
                 </div>
               </div>
               <div class="form-group has-feedback col-md-6" [ngClass]="{ 'has-error': f.submitted && !Type.valid }">
-                <label for="txtType" class="col-md-4 control-label">Type</label>
+                <label for="txtType" class="col-md-4 control-label">类型</label>
                 <div class="col-sm-8">
                   <select class="form-control" name="Type" id="txtType" [(ngModel)]="currentEntity.Type"
                           #Type="ngModel"
                           required>
-                    <option value="0">诵佛</option>
-                    <option value="1">念经</option>
+                    <option value="0">诵经</option>
+                    <option value="1">打坐</option>
                     <option value="2">持咒</option>
+                    <option value="3">抄经</option>
                   </select>
                   <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
-                  <div *ngIf="f.submitted && !Type.valid" class="help-block">Type is required</div>
+                  <div *ngIf="f.submitted && !Type.valid" class="help-block">类型必填</div>
+                </div>
+              </div>
+              <div class="form-group has-feedback col-md-12" [ngClass]="{ 'has-error': f.submitted && !Content.valid }">
+                <label for="txtContent" class="col-md-2 control-label">内容</label>
+                <div class="col-sm-10">
+                  <textarea type="text" class="form-control" name="Content" id="txtContent"
+                            [(ngModel)]="currentEntity.Content"
+                            #Content="ngModel"
+                            required rows="8"></textarea>
+                  <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
+                  <div *ngIf="f.submitted && !Content.valid" class="help-block">内容必填</div>
                 </div>
               </div>
 

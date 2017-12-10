@@ -21,9 +21,9 @@ import {AdminAddClassComponent} from './admin-classes/admin-add-class/admin-add-
 
 import {ModalModule} from 'ngx-modialog';
 import {BootstrapModalModule} from 'ngx-modialog/plugins/bootstrap';
-import {FileUploadModule} from 'ng2-file-upload';
-
-import {HttpInterceptorService} from '../util/http-interceptor-service.service';
+import {FileUploadModule} from 'ng2-file-upload'; // 文件上传组件
+import {HttpInterceptorService} from '../util/http-interceptor-service.service'; // 自定义httpService
+import {NgxPaginationModule} from 'ngx-pagination'; // 分页组件 <-- import the module
 
 @NgModule({
   imports: [
@@ -42,6 +42,7 @@ import {HttpInterceptorService} from '../util/http-interceptor-service.service';
     ModalModule.forRoot(),
     BootstrapModalModule,
     FileUploadModule,
+    NgxPaginationModule,
   ],
   declarations: [
     AdminComponent,
