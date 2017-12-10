@@ -17,12 +17,13 @@ import {AdminClassesComponent} from './admin-classes/admin-classes.component';
 
 import {LoggedInGuard} from '../login/logged-in-guard';
 import {AuthService} from '../login/auth-service';
-import { AdminAddClassComponent } from './admin-classes/admin-add-class/admin-add-class.component';
+import {AdminAddClassComponent} from './admin-classes/admin-add-class/admin-add-class.component';
 
-import { ModalModule } from 'ngx-modialog';
-import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
-import { FileUploadModule } from 'ng2-file-upload';
+import {ModalModule} from 'ngx-modialog';
+import {BootstrapModalModule} from 'ngx-modialog/plugins/bootstrap';
+import {FileUploadModule} from 'ng2-file-upload';
 
+import {HttpInterceptorService} from '../util/http-interceptor-service.service';
 
 @NgModule({
   imports: [
@@ -55,7 +56,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     AdminAddClassComponent,
   ],
   exports: [AdminComponent],
-  providers: [AuthService, LoggedInGuard]
+  providers: [AuthService, LoggedInGuard, HttpInterceptorService]
 })
 export class AdminModule {
 }

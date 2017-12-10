@@ -15,7 +15,7 @@
   <!-- Main content -->
   <!-- Main content -->
   <section class="content">
-    <div class="row">
+    <div class="row" *ngIf="!isUploadShow">
       <div class="col-md-12">
         <!-- Horizontal Form -->
         <div class="box box-primary">
@@ -54,8 +54,9 @@
                   <select class="form-control" name="Type" id="txtType" [(ngModel)]="currentEntity.Type"
                           #Type="ngModel"
                           required>
-                    <option value="0">采购</option>
-                    <option value="1">销售</option>
+                    <option value="0">诵佛</option>
+                    <option value="1">念经</option>
+                    <option value="2">持咒</option>
                   </select>
                   <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
                   <div *ngIf="f.submitted && !Type.valid" class="help-block">Type is required</div>
@@ -65,27 +66,87 @@
               <div class="form-group col-md-12">
                 <label for="" class="col-sm-2 control-label">图片附件</label>
                 <div class="col-sm-10">
-                  <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr()">
+                  <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.PicId)">
                     <i class="fa fa-fw fa-upload"></i>点击上传
                   </a>
                 </div>
               </div>
-              <div class="form-group col-md-12" *ngIf="attachmentList">
+              <div class="form-group col-md-12" *ngIf="picAttachmentList && picAttachmentList.length > 0">
                 <label for="" class="col-sm-2 control-label">图片列表</label>
                 <div class="col-sm-5">
                   <ul class="todo-list ui-sortable">
-                    <li ng-repeat="attr in attachmentList">
+                    <li *ngFor="let attr of picAttachmentList">
                       <!-- drag handle -->
                       <span class="handle ui-sortable-handle">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </span>
-                      <span class="text">{{attr.Name}}</span>
+                          <i class="fa fa-ellipsis-v"></i>
+                          <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <span class="text">{{ attr.Name }}</span>
                       <div class="tools">
                         <!--<i class="fa fa-edit"></i>-->
-                        <i class="fa fa-fw fa-eye" ng-click="viewAttr(attr)" title="查看"></i>
+                        <i class="fa fa-fw fa-eye" (click)="viewAttachment(attr)" title="查看"></i>
                         &nbsp;&nbsp;
-                        <i class="fa fa-trash-o" ng-click="deleteAttachment(attr)" title="删除"></i>
+                        <i class="fa fa-trash-o" (click)="deleteAttachment(attr)" title="删除"></i>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-group col-md-12">
+                <label for="" class="col-sm-2 control-label">音频附件</label>
+                <div class="col-sm-10">
+                  <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.MusicId)">
+                    <i class="fa fa-fw fa-upload"></i>点击上传
+                  </a>
+                </div>
+              </div>
+              <div class="form-group col-md-12" *ngIf="musicAttachmentList && musicAttachmentList.length > 0">
+                <label for="" class="col-sm-2 control-label">音频列表</label>
+                <div class="col-sm-5">
+                  <ul class="todo-list ui-sortable">
+                    <li *ngFor="let attr of musicAttachmentList">
+                      <!-- drag handle -->
+                      <span class="handle ui-sortable-handle">
+                          <i class="fa fa-ellipsis-v"></i>
+                          <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <span class="text">{{ attr.Name }}</span>
+                      <div class="tools">
+                        <!--<i class="fa fa-edit"></i>-->
+                        <i class="fa fa-fw fa-eye" (click)="viewAttachment(attr)" title="查看"></i>
+                        &nbsp;&nbsp;
+                        <i class="fa fa-trash-o" (click)="deleteAttachment(attr)" title="删除"></i>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-group col-md-12">
+                <label for="" class="col-sm-2 control-label">视频附件</label>
+                <div class="col-sm-10">
+                  <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.VideoId)">
+                    <i class="fa fa-fw fa-upload"></i>点击上传
+                  </a>
+                </div>
+              </div>
+              <div class="form-group col-md-12" *ngIf="videoAttachmentList && videoAttachmentList.length > 0">
+                <label for="" class="col-sm-2 control-label">视频列表</label>
+                <div class="col-sm-5">
+                  <ul class="todo-list ui-sortable">
+                    <li *ngFor="let attr of videoAttachmentList">
+                      <!-- drag handle -->
+                      <span class="handle ui-sortable-handle">
+                          <i class="fa fa-ellipsis-v"></i>
+                          <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <span class="text">{{ attr.Name }}</span>
+                      <div class="tools">
+                        <!--<i class="fa fa-edit"></i>-->
+                        <i class="fa fa-fw fa-eye" (click)="viewAttachment(attr)" title="查看"></i>
+                        &nbsp;&nbsp;
+                        <i class="fa fa-trash-o" (click)="deleteAttachment(attr)" title="删除"></i>
                       </div>
                     </li>
                   </ul>
@@ -99,8 +160,9 @@
                      src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
               </div>
               <div class="col-md-1">
-                <button [disabled]="loading" type="submit" class="btn btn-primary btn-flat pull-right">Sign
-                  In
+                <button [disabled]="loading" type="submit" class="btn btn-primary btn-flat pull-right">
+                  <i class="fa fa-save"></i>
+                  新增
                 </button>
               </div>
             </div>
@@ -113,102 +175,119 @@
     </div>
     <!-- /.row -->
 
-    <div class="row">
-      <div class="col-md-3">
-        <h3>Select files</h3>
-        <div ng2FileDrop
-             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-             (fileOver)="fileOverBase($event)"
-             [uploader]="uploader"
-             class="well my-drop-zone">
-          Base drop zone
-        </div>
-
-        <div ng2FileDrop
-             [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}"
-             (fileOver)="fileOverAnother($event)"
-             [uploader]="uploader"
-             class="well my-drop-zone">
-          Another drop zone
-        </div>
-
-        Multiple
-        <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
-
-        Single
-        <input type="file" ng2FileSelect [uploader]="uploader" />
-      </div>
-
-      <div class="col-md-9" style="margin-bottom: 40px">
-
-        <h3>Upload queue</h3>
-        <p>Queue length: {{ uploader?.queue?.length }}</p>
-
-        <table class="table">
-          <thead>
-          <tr>
-            <th width="50%">Name</th>
-            <th>Size</th>
-            <th>Progress</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let item of uploader.queue">
-            <td><strong>{{ item?.file?.name }}</strong></td>
-            <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-            <td *ngIf="uploader.isHTML5">
-              <div class="progress" style="margin-bottom: 0;">
-                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+    <div class="row" *ngIf="isUploadShow">
+      <div class="col-md-12">
+        <!-- Horizontal Form -->
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">附件上传</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="col-md-3">
+              <h3>Select files</h3>
+              <div ng2FileDrop
+                   [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                   (fileOver)="fileOverBase($event)"
+                   [uploader]="uploader"
+                   class="well my-drop-zone">
+                Base drop zone
               </div>
-            </td>
-            <td class="text-center">
-              <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-              <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-              <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-            </td>
-            <td nowrap>
-              <button type="button" class="btn btn-success btn-xs"
-                      (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                <span class="glyphicon glyphicon-upload"></span> Upload
-              </button>
-              <button type="button" class="btn btn-warning btn-xs"
-                      (click)="item.cancel()" [disabled]="!item.isUploading">
-                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-              </button>
-              <button type="button" class="btn btn-danger btn-xs"
-                      (click)="item.remove()">
-                <span class="glyphicon glyphicon-trash"></span> Remove
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-
-        <div>
-          <div>
-            Queue progress:
-            <div class="progress" style="">
-              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+              <div ng2FileDrop
+                   [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}"
+                   (fileOver)="fileOverAnother($event)"
+                   [uploader]="uploader"
+                   class="well my-drop-zone">
+                Another drop zone
+              </div>
+              Multiple
+              <input type="file" ng2FileSelect [uploader]="uploader" multiple/><br/>
+            </div>
+            <div class="col-md-9" style="margin-bottom: 40px">
+              <h3>Upload queue</h3>
+              <p>Queue length: {{ uploader?.queue?.length }}</p>
+              <table class="table">
+                <thead>
+                <tr>
+                  <th width="50%">Name</th>
+                  <th>Size</th>
+                  <th>Progress</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of uploader.queue">
+                  <td><strong>{{ item?.file?.name }}</strong></td>
+                  <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                  <td *ngIf="uploader.isHTML5">
+                    <div class="progress" style="margin-bottom: 0;">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                    <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                    <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                  </td>
+                  <td nowrap>
+                    <button type="button" class="btn btn-success btn-xs"
+                            (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                      <span class="glyphicon glyphicon-upload"></span> Upload
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs"
+                            (click)="item.cancel()" [disabled]="!item.isUploading">
+                      <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs"
+                            (click)="item.remove()">
+                      <span class="glyphicon glyphicon-trash"></span> Remove
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <div>
+                <div>
+                  Queue progress:
+                  <div class="progress" style="">
+                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-success btn-s"
+                        (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                  <span class="glyphicon glyphicon-upload"></span> Upload all
+                </button>
+                <button type="button" class="btn btn-warning btn-s"
+                        (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                  <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                </button>
+                <button type="button" class="btn btn-danger btn-s"
+                        (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                  <span class="glyphicon glyphicon-trash"></span> Remove all
+                </button>
+              </div>
             </div>
           </div>
-          <button type="button" class="btn btn-success btn-s"
-                  (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-            <span class="glyphicon glyphicon-upload"></span> Upload all
-          </button>
-          <button type="button" class="btn btn-warning btn-s"
-                  (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-            <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-          </button>
-          <button type="button" class="btn btn-danger btn-s"
-                  (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-            <span class="glyphicon glyphicon-trash"></span> Remove all
-          </button>
+
+          <div class="box-footer">
+            <div class="col-md-10"></div>
+            <div class="col-md-1">
+              <img *ngIf="loading" class="pull-right"
+                   src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+            </div>
+            <div class="col-md-1">
+              <button type="button" (click)="closeUpload()" class="btn btn-primary btn-flat pull-right">
+                <i class="fa fa-close"></i>
+                关闭
+              </button>
+            </div>
+          </div>
         </div>
-
+        <!-- /.box -->
+        <!-- general form elements disabled -->
+        <!-- /.box -->
       </div>
-
     </div>
   </section>
   <!-- /.content -->

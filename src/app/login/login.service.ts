@@ -19,7 +19,7 @@ export class LoginService {
    * 获取授权token
    * */
   login(user: UserModel): Promise<any> {
-    const regUrl = AppSetting.loginbaseUrl + 'getAccessToken';
+    const regUrl = AppSetting.apiBaseUrl + 'getAccessToken';
     const reqData = `grant_type=password&username=${user.username}&password=${user.password}`;
 
     return this._http.post(regUrl, (reqData))

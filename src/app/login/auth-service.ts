@@ -1,6 +1,7 @@
 // 创建登录认证服务
 import {Injectable} from '@angular/core';
 import {AppSetting} from '../app-setting';
+import {LoginTokenModel} from './login-token-model';
 
 @Injectable()
 export class AuthService {
@@ -17,11 +18,14 @@ export class AuthService {
     localStorage.removeItem(AppSetting.currentTokenKey);
   }
 
-  getUser(): any {
+  public getUser(): any {
     return localStorage.getItem(AppSetting.currentTokenKey);
   }
 
   isLoggedIn(): boolean {
+    // todo 判断token是否在有效期内
+    // let user = (this.getUser()) as LoginTokenModel;
+    // user.expires >
     return this.getUser() !== null;
   }
 }

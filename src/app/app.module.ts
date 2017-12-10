@@ -8,6 +8,7 @@ import {AppComponent} from './app.component';
 import {StarterModule} from './starter/starter.module';
 import {LoginModule} from './login/login.module';
 import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import {HttpModule} from '@angular/http';
   ],
   imports: [
     HttpModule,
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     AdminModule,
