@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {SocialClassDto} from '../../../dto/social-class-dto';
 import {} from 'jquery';
 
-import {ActivatedRoute, ParamMap, Params} from '@angular/router';
+import {ActivatedRoute, ParamMap, Params, Router} from '@angular/router';
 
 import {Overlay} from 'ngx-modialog';
-import {Modal} from 'ngx-modialog/plugins/bootstrap';
+import {BootstrapModalSize, Modal} from 'ngx-modialog/plugins/bootstrap';
 
 import {FileUploader} from 'ng2-file-upload';
 import {AppSetting} from '../../../app-setting';
@@ -13,7 +13,7 @@ import {HttpInterceptorService} from '../../../util/http-interceptor-service.ser
 import {StatusCode} from '../../../dto/status-code';
 
 import {UUID} from 'angular2-uuid';
-import {TAttachmentDto} from "../../../dto/tattachment-dto";
+import {TAttachmentDto} from '../../../dto/tattachment-dto';
 
 
 @Component({
@@ -24,7 +24,7 @@ import {TAttachmentDto} from "../../../dto/tattachment-dto";
 export class AdminAddClassComponent implements OnInit {
   currentEntity: SocialClassDto = new SocialClassDto();
 
-  loading = false;
+  showLoading = false;
   public uploader: FileUploader = new FileUploader({url: AppSetting.fileUploadUrl});
   public hasBaseDropZoneOver = false;
   public hasAnotherDropZoneOver = false;
@@ -43,7 +43,8 @@ export class AdminAddClassComponent implements OnInit {
 
   constructor(public modal: Modal,
               private route: ActivatedRoute,
-              private httpService: HttpInterceptorService) {
+              private httpService: HttpInterceptorService,
+              private router: Router) {
 
   }
 
@@ -73,14 +74,13 @@ export class AdminAddClassComponent implements OnInit {
   }
 
   add(): void {
-    this.loading = true;
+    this.showLoading = true;
     const urlMethod = this.currentEntity.Id > 0 ? `modify?id=${this.currentEntity.Id}` : 'add';
     const url = AppSetting.apiBaseUrl + `SocialClass/${urlMethod}`;
-    const dataParam = JSON.stringify(this.currentEntity);
     this.httpService.postByHttpClient(url, this.currentEntity).subscribe(res => {
       if (res.StatusCode === StatusCode.SUCCESS) {
         this.showDialog(res.StatusDescription);
-        this.loading = false;
+        this.showLoading = false;
       }
     });
   }
@@ -105,8 +105,8 @@ export class AdminAddClassComponent implements OnInit {
   }
 
   showDialog(message: string): void {
-    const dialogRef = this.modal.alert()
-      .size('lg') // lg
+    const dialogRef = this.modal.confirm()
+      .size(<BootstrapModalSize>'md') // lg
       .showClose(true)
       .title('A simple Alert style modal window')
       .body(`<h4>Alert is a classic (title/body/footer) 1 button modal window that does not block.</h4>
@@ -121,10 +121,15 @@ export class AdminAddClassComponent implements OnInit {
       `)
       .open();
     dialogRef.result
-      .then(result =>
-        // alert(`The result is: ${result}`)
-        console.log(`The result is: ${result}`)
-      );
+      .then(result => {
+          if (result === true) {
+
+          }
+        }
+      )
+      .catch(error => {
+        // console.log(error);
+      });
   }
 
   private loadPicAttr(PicId: string) {
@@ -179,4 +184,9 @@ export class AdminAddClassComponent implements OnInit {
       });
     }
   }
+
+  goListPage(): void {
+    this.router.navigateByUrl('/admin/classes');
+  }
+
 }

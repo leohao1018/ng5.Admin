@@ -1,4 +1,7 @@
 export class SocialClassDto {
+  Checked = false;
+
+  Index = 0;
 
   Id = 0;
 
@@ -23,6 +26,8 @@ export class SocialClassDto {
   VideoId: string;
 
   Type: number;
+
+  TypeString: string;
 
 }
 

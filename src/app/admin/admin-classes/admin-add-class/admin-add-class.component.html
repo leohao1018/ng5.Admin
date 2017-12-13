@@ -9,7 +9,7 @@
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> 后台管理</a></li>
       <li><a href="#">功课</a></li>
-      <li class="active">新增</li>
+      <li class="active">保存</li>
     </ol>
   </section>
   <!-- Main content -->
@@ -20,7 +20,7 @@
         <!-- Horizontal Form -->
         <div class="box box-primary">
           <div class="box-header with-border">
-            <h3 class="box-title">新增功课</h3>
+            <h3 class="box-title">保存功课</h3>
           </div>
           <!-- /.box-header -->
           <!-- form start -->
@@ -146,7 +146,6 @@
                       <div class="tools">
                         <!--<i class="fa fa-edit"></i>-->
                         <i class="fa fa-fw fa-eye" (click)="viewAttachment(attr)" title="查看"></i>
-                        &nbsp;&nbsp;
                         <i class="fa fa-trash-o" (click)="deleteAttachment(attr)" title="删除"></i>
                       </div>
                     </li>
@@ -155,16 +154,18 @@
               </div>
             </div>
             <div class="box-footer">
-              <div class="col-md-10"></div>
-              <div class="col-md-1">
-                <img *ngIf="loading" class="pull-right"
-                     src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
-              </div>
-              <div class="col-md-1">
-                <button [disabled]="loading" type="submit" class="btn btn-primary btn-flat pull-right">
-                  <i class="fa fa-save"></i>
-                  新增
-                </button>
+              <div style="text-align: center;">
+                <p>
+                  <img *ngIf="showLoading" src="../../../../assets/img/loading.gif" height="16" width="16"/>
+                  <button [disabled]="loading" type="submit" class="btn btn-primary btn-flat btn-sm">
+                    <i class="fa fa-save"></i>
+                    保存
+                  </button>
+                  <button type="button" class="btn btn-primary btn-flat btn-sm" (click)="goListPage()">
+                    <i class="fa fa-rotate-left"></i>
+                    返回列表
+                  </button>
+                </p>
               </div>
             </div>
           </form>

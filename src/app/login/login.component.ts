@@ -19,7 +19,9 @@ export class LoginComponent implements OnInit {
   loading = false;
   loginErrorMsg = '';
 
-  constructor(private loginService: LoginService, private router: Router, private authService: AuthService) {
+  constructor(private loginService: LoginService,
+              private router: Router,
+              private authService: AuthService) {
   }
 
   ngOnInit() {

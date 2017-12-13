@@ -15,46 +15,133 @@
   <!-- Main content -->
   <section class="content">
     <div class="row">
+      <div class="col-md-12">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              <span class="glyphicon glyphicon-filter"></span>
+              查询条件
+            </h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+          </div>
+
+          <form class="form-horizontal" name="form" (ngSubmit)="f.form.valid && queryList()" #f="ngForm" novalidate>
+            <div class="box-body">
+              <div class="form-group has-feedback col-md-6" [ngClass]="{ 'has-error': f.submitted && !Subject.valid }">
+                <label for="txtSubject" class="col-md-4 control-label">标题</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" name="Subject" id="txtSubject"
+                         [(ngModel)]="queryParam.Subject"
+                         #Subject="ngModel"/>
+                  <!--<span class="glyphicon glyphicon-envelope form-control-feedback"></span>-->
+                  <div *ngIf="f.submitted && !Subject.valid" class="help-block">标题必填</div>
+                </div>
+              </div>
+              <div class="form-group has-feedback col-md-6" [ngClass]="{ 'has-error': f.submitted && !Type.valid }">
+                <label for="txtType" class="col-md-4 control-label">类型</label>
+                <div class="col-sm-8">
+                  <select class="form-control" name="Type" id="txtType" [(ngModel)]="queryParam.Type"
+                          #Type="ngModel">
+                    <option value="0">诵经</option>
+                    <option value="1">打坐</option>
+                    <option value="2">持咒</option>
+                    <option value="3">抄经</option>
+                  </select>
+                  <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
+                  <div *ngIf="f.submitted && !Type.valid" class="help-block">类型必填</div>
+                </div>
+              </div>
+            </div>
+            <div class="box-footer">
+              <div class="col-md-8"></div>
+              <div class="col-md-1">
+                <img *ngIf="showLoading" class="pull-left" src="../../../assets/img/loading.gif" height="16"
+                     width="16"/>
+              </div>
+              <div class="col-md-3">
+                <p>
+                  <button [disabled]="showLoading" type="submit" class="btn btn-primary btn-sm btn-flat">
+                    <i class="fa fa-fw fa-search"></i>
+                    查询
+                  </button>
+                  <button type="button" class="btn btn-primary btn-sm btn-flat"
+                          (click)="resetSearch()">
+                    <i class="fa fa-fw fa-undo"></i>
+                    重置
+                  </button>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!--数据列表-->
+    <div class="row">
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header">
             <h3 class="box-title">功课列表</h3>
-
             <div class="box-tools">
-              <div class="input-group input-group-sm" style="width: 150px;">
-                <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+              <div class="input-group input-group-sm">
+                <p>
+                  <label>
+                    <input type="checkbox" name="checkToolAll" (click)="checkAll()" [(ngModel)]="checkedAllData">全选
+                  </label>
+                  <button class="btn btn-default  btn-xs btn-flat" (click)="addNew()">
+                    <i class="fa fa-plus-square"></i>
+                    新增
+                  </button>
+                  <button class="btn btn-primary  btn-xs btn-flat" (click)="editOne()">
+                    <i class="fa fa-fw fa-edit"></i>
+                    编辑
+                  </button>
+                  <button class="btn btn-danger  btn-xs btn-flat" (click)="delete()">
+                    <i class="fa fa-minus-square"></i>
+                    删除
+                  </button>
+                </p>
 
-                <div class="input-group-btn">
-                  <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </div>
+                <!--<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">-->
+                <!--<div class="input-group-btn">-->
+                <!--<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>-->
+                <!--</div>-->
               </div>
             </div>
+          </div>
+
+          <div class="default-loading-container">
+            <ngx-loading [show]="showDataLoading" [config]="dataLoadingConfig"></ngx-loading>
           </div>
           <!-- /.box-header -->
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
               <tr>
-                <th>ID</th>
-                <th>User</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Reason</th>
+                <th>操作</th>
+                <th>#</th>
+                <th>标题</th>
+                <th>类别</th>
+                <th>添加时间</th>
+                <th>其他</th>
               </tr>
-              <tr>
-                <td>183</td>
-                <td>John Doe</td>
-                <td>11-7-2014</td>
+              <tr
+                *ngFor="let item of dataArr | paginate: { itemsPerPage: queryParam.PageSize, currentPage: queryParam.PageIndex, totalItems: totalCount}">
+                <td>
+                  <label>
+                    <input type="checkbox" name="checkTool" (click)="dataCheckChange(item)"
+                           [(ngModel)]="item.Checked">
+                  </label>
+                </td>
+                <td>{{item.Index}}</td>
+                <td>{{item.Subject}}</td>
+                <td>{{item.TypeString}}</td>
+                <td>{{item.AddTime}}</td>
                 <td><span class="label label-success">Approved</span></td>
-                <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
               </tr>
-
             </table>
-
-            <ul class="meal-list">
-              <li *ngFor="let meal of meals | paginate: { itemsPerPage: 1, currentPage: page, totalItems: totalPage}">
-                {{ meal }}
-              </li>
-            </ul>
           </div>
           <!-- /.box-body -->
           <div class="box-footer clearfix">
