@@ -14,6 +14,8 @@ import {StatusCode} from '../../../dto/status-code';
 
 import {UUID} from 'angular2-uuid';
 import {TAttachmentDto} from '../../../dto/tattachment-dto';
+import {ANIMATION_TYPES} from 'ngx-loading';
+import {DialogService} from '../../../util/dialog-service';
 
 
 @Component({
@@ -23,15 +25,25 @@ import {TAttachmentDto} from '../../../dto/tattachment-dto';
 })
 export class AdminAddClassComponent implements OnInit {
   currentEntity: SocialClassDto = new SocialClassDto();
+  picAttachmentList = [];
+  musicAttachmentList = [];
+  videoAttachmentList = [];
 
-  showLoading = false;
+  isShowDataLoading = false;
+  dataLoadingConfig = {
+    animationType: ANIMATION_TYPES.threeBounce,
+    backdropBorderRadius: '4px',
+    backdropBackgroundColour: 'rgba(255,255,255,0.2)',
+    primaryColour: '#3c8dbc',
+    secondaryColour: '#3c8dbc',
+    tertiaryColour: '#3c8dbc',
+    fullScreenBackdrop: false,
+  };
+  isShowLoading = false;
   public uploader: FileUploader = new FileUploader({url: AppSetting.fileUploadUrl});
   public hasBaseDropZoneOver = false;
   public hasAnotherDropZoneOver = false;
   public isUploadShow = false;
-  picAttachmentList = [];
-  musicAttachmentList = [];
-  videoAttachmentList = [];
 
   public fileOverBase(e: any): void {
     this.hasBaseDropZoneOver = e;
@@ -41,7 +53,7 @@ export class AdminAddClassComponent implements OnInit {
     this.hasAnotherDropZoneOver = e;
   }
 
-  constructor(public modal: Modal,
+  constructor(private dialogService: DialogService,
               private route: ActivatedRoute,
               private httpService: HttpInterceptorService,
               private router: Router) {
@@ -56,16 +68,20 @@ export class AdminAddClassComponent implements OnInit {
 
   initEntity(id: number): void {
     if (id) {
-      const url = AppSetting.apiBaseUrl + `SocialClass/get/${id}`;
-      this.httpService.getByHttpClient(url).subscribe(res => {
-        if (res.StatusCode === StatusCode.SUCCESS) {
-          this.currentEntity = res.Result as SocialClassDto;
+      this.isShowDataLoading = true;
+      setTimeout((args) => {
+        const url = AppSetting.apiBaseUrl + `SocialClass/get/${id}`;
+        this.httpService.getByHttpClient(url).subscribe(res => {
+          if (res.StatusCode === StatusCode.SUCCESS) {
+            this.currentEntity = res.Result as SocialClassDto;
 
-          this.loadPicAttr(this.currentEntity.PicId);
-          this.loadMusicAttr(this.currentEntity.MusicId);
-          this.loadVideoAttr(this.currentEntity.VideoId);
-        }
-      });
+            this.loadPicAttr(this.currentEntity.PicId);
+            this.loadMusicAttr(this.currentEntity.MusicId);
+            this.loadVideoAttr(this.currentEntity.VideoId);
+          }
+          this.isShowDataLoading = false;
+        });
+      }, 0);
     } else {
       this.currentEntity.PicId = UUID.UUID();
       this.currentEntity.MusicId = UUID.UUID();
@@ -73,14 +89,18 @@ export class AdminAddClassComponent implements OnInit {
     }
   }
 
-  add(): void {
-    this.showLoading = true;
+  save(): void {
+    this.isShowLoading = true;
     const urlMethod = this.currentEntity.Id > 0 ? `modify?id=${this.currentEntity.Id}` : 'add';
     const url = AppSetting.apiBaseUrl + `SocialClass/${urlMethod}`;
     this.httpService.postByHttpClient(url, this.currentEntity).subscribe(res => {
       if (res.StatusCode === StatusCode.SUCCESS) {
-        this.showDialog(res.StatusDescription);
-        this.showLoading = false;
+        this.dialogService.showDialog(res.StatusDescription,
+          param => {
+            this.router.navigateByUrl('admin/class/classes');
+          },
+          null);
+        this.isShowLoading = false;
       }
     });
   }
@@ -102,34 +122,6 @@ export class AdminAddClassComponent implements OnInit {
   closeUpload(): void {
     this.isUploadShow = false;
     this.uploader = new FileUploader({url: AppSetting.fileUploadUrl});
-  }
-
-  showDialog(message: string): void {
-    const dialogRef = this.modal.confirm()
-      .size(<BootstrapModalSize>'md') // lg
-      .showClose(true)
-      .title('A simple Alert style modal window')
-      .body(`<h4>Alert is a classic (title/body/footer) 1 button modal window that does not block.</h4>
-            <b>Configuration:</b>
-            <ul>
-                <li>Non blocking (click anywhere outside to dismiss)</li>
-                <li>Size large</li>
-                <li>Dismissed with default keyboard key (ESC)</li>
-                <li>Close wth button click</li>
-                <li>${message}</li>
-            </ul>
-      `)
-      .open();
-    dialogRef.result
-      .then(result => {
-          if (result === true) {
-
-          }
-        }
-      )
-      .catch(error => {
-        // console.log(error);
-      });
   }
 
   private loadPicAttr(PicId: string) {
@@ -186,7 +178,7 @@ export class AdminAddClassComponent implements OnInit {
   }
 
   goListPage(): void {
-    this.router.navigateByUrl('/admin/classes');
+    this.router.navigateByUrl('/admin/class/classes');
   }
 
 }

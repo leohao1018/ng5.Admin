@@ -57,12 +57,12 @@
             <div class="box-footer">
               <div class="col-md-8"></div>
               <div class="col-md-1">
-                <img *ngIf="showLoading" class="pull-left" src="../../../assets/img/loading.gif" height="16"
+                <img *ngIf="isShowLoading" class="pull-left" src="../../../assets/img/loading.gif" height="16"
                      width="16"/>
               </div>
               <div class="col-md-3">
                 <p>
-                  <button [disabled]="showLoading" type="submit" class="btn btn-primary btn-sm btn-flat">
+                  <button [disabled]="isShowLoading" type="submit" class="btn btn-primary btn-sm btn-flat">
                     <i class="fa fa-fw fa-search"></i>
                     查询
                   </button>
@@ -87,41 +87,39 @@
             <h3 class="box-title">功课列表</h3>
             <div class="box-tools">
               <div class="input-group input-group-sm">
-                <p>
-                  <label>
-                    <input type="checkbox" name="checkToolAll" (click)="checkAll()" [(ngModel)]="checkedAllData">全选
-                  </label>
-                  <button class="btn btn-default  btn-xs btn-flat" (click)="addNew()">
-                    <i class="fa fa-plus-square"></i>
-                    新增
-                  </button>
-                  <button class="btn btn-primary  btn-xs btn-flat" (click)="editOne()">
-                    <i class="fa fa-fw fa-edit"></i>
-                    编辑
-                  </button>
-                  <button class="btn btn-danger  btn-xs btn-flat" (click)="delete()">
-                    <i class="fa fa-minus-square"></i>
-                    删除
-                  </button>
-                </p>
-
-                <!--<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">-->
-                <!--<div class="input-group-btn">-->
-                <!--<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>-->
-                <!--</div>-->
+                <div class="checkbox checkbox-primary checkbox-inline">
+                  <input type="checkbox" class="styled" name="checkToolAll" (click)="checkAll()" [(ngModel)]="isCheckedAll">
+                  <label >全选</label>
+                </div>
+                <div class="checkbox-inline">
+                  <p style="margin-bottom: 0">
+                    <button class="btn btn-default  btn-xs btn-flat" (click)="addNew()">
+                      <i class="fa fa-plus-square"></i>
+                      新增
+                    </button>
+                    <button class="btn btn-primary  btn-xs btn-flat" (click)="editOne()">
+                      <i class="fa fa-fw fa-edit"></i>
+                      编辑
+                    </button>
+                    <button class="btn btn-danger  btn-xs btn-flat" (click)="delete()">
+                      <i class="fa fa-minus-square"></i>
+                      删除
+                    </button>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="default-loading-container">
-            <ngx-loading [show]="showDataLoading" [config]="dataLoadingConfig"></ngx-loading>
+            <ngx-loading [show]="isShowDataLoading"></ngx-loading>
           </div>
           <!-- /.box-header -->
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
               <tr>
-                <th>操作</th>
-                <th>#</th>
+                <th style="width: 5%">操作</th>
+                <th style="width: 5%">#</th>
                 <th>标题</th>
                 <th>类别</th>
                 <th>添加时间</th>
@@ -130,15 +128,16 @@
               <tr
                 *ngFor="let item of dataArr | paginate: { itemsPerPage: queryParam.PageSize, currentPage: queryParam.PageIndex, totalItems: totalCount}">
                 <td>
-                  <label>
-                    <input type="checkbox" name="checkTool" (click)="dataCheckChange(item)"
+                  <div class="checkbox checkbox-primary">
+                    <input class="styled" type="checkbox" name="checkTool" (click)="dataItemCheckChange(item)"
                            [(ngModel)]="item.Checked">
-                  </label>
+                    <label></label>
+                  </div>
                 </td>
-                <td>{{item.Index}}</td>
-                <td>{{item.Subject}}</td>
-                <td>{{item.TypeString}}</td>
-                <td>{{item.AddTime}}</td>
+                <td>{{ item.Index }}</td>
+                <td>{{ item.Subject }}</td>
+                <td>{{ item.TypeString }}</td>
+                <td>{{ item.AddTime }}</td>
                 <td><span class="label label-success">Approved</span></td>
               </tr>
             </table>
@@ -146,8 +145,25 @@
           <!-- /.box-body -->
           <div class="box-footer clearfix">
             <div class="has-text-centered pull-right">
-              <pagination-controls (pageChange)="pageChange($event)"></pagination-controls>
+              <pagination-controls (pageChange)="pageChange($event)"
+                                   previousLabel="上一页"
+                                   nextLabel="下一页"
+                                   screenReaderPaginationLabel="Pagination"
+                                   screenReaderPageLabel="page"
+                                   screenReaderCurrentLabel="You're on page"></pagination-controls>
             </div>
+            <div class="pull-right">
+              <select class="form-control sel-page-size" name="PageSize" id="txtPageSize"
+                      [(ngModel)]="queryParam.PageSize"
+                      #PageSize="ngModel"
+                      (change)="pageSizeChange()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+          </div>
           </div>
         </div>
         <!-- /.box -->

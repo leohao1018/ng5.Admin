@@ -4,8 +4,8 @@ import {AppSetting} from '../../app-setting';
 import {HttpInterceptorService} from '../../util/http-interceptor-service.service';
 import {StatusCode} from '../../dto/status-code';
 import {} from 'jquery';
-import {ANIMATION_TYPES} from 'ngx-loading';
 import {Router} from '@angular/router';
+import {DialogService} from '../../util/dialog-service';
 
 @Component({
   selector: 'app-admin-classes',
@@ -14,23 +14,12 @@ import {Router} from '@angular/router';
 })
 
 export class AdminClassesComponent implements OnInit {
-  queryUrl = AppSetting.apiBaseUrl + 'SocialClass/PagingData';
-  addUrl = 'SocialClass/PagingData';
-  editUrl = 'SocialClass/PagingData';
-  deleteUrl = AppSetting.apiBaseUrl + 'SocialClass/PagingData';
+  queryUrl = AppSetting.apiBaseUrl + 'SocialClass/pagingData';
+  deleteUrl = AppSetting.apiBaseUrl + 'SocialClass/deleteLogic';
 
-  showDataLoading = false;
-  dataLoadingConfig = {
-    animationType: ANIMATION_TYPES.threeBounce,
-    backdropBorderRadius: '4px',
-    backdropBackgroundColour: 'rgba(255,255,255,0.2)',
-    primaryColour: '#3c8dbc',
-    secondaryColour: '#3c8dbc',
-    tertiaryColour: '#3c8dbc',
-    fullScreenBackdrop: false,
-  };
-  showLoading = false;
-  checkedAllData = false;
+  isShowDataLoading = false;
+  isShowLoading = false;
+  isCheckedAll = false;
 
   @Input('data')
   totalCount = 0;
@@ -52,21 +41,31 @@ export class AdminClassesComponent implements OnInit {
   }
 
   constructor(private httpClient: HttpInterceptorService,
-              private router: Router) {
+              private router: Router,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
-    this.queryList();
+    setTimeout(() => {
+      this.queryList();
+    }, 0);
   }
 
+  /**
+   * 分页点击
+   * @param $event
+   */
   pageChange($event: any): void {
     this.queryParam.PageIndex = $event;
     this.queryList();
   }
 
+  /**
+   * 加载数据
+   */
   queryList(): void {
-    this.showLoading = true;
-    this.showDataLoading = true;
+    this.isShowLoading = true;
+    this.isShowDataLoading = true;
     this.httpClient.postByHttpClient(this.queryUrl, this.queryParam).subscribe(res => {
       if (res.StatusCode !== StatusCode.SUCCESS) {
         this.dataArr = [];
@@ -100,41 +99,91 @@ export class AdminClassesComponent implements OnInit {
         }
       });
 
-      this.showLoading = false;
-      this.showDataLoading = false;
+      this.isShowLoading = false;
+      this.isShowDataLoading = false;
     });
   }
 
+  /**
+   * 重置
+   */
   resetSearch(): void {
     this.initQueryParam();
     this.queryList();
   }
 
+  /**
+   * 全选
+   */
   checkAll(): void {
-    this.checkedAllData = !this.checkedAllData;
+    this.isCheckedAll = !this.isCheckedAll;
     this.dataArr.map(x => {
-      x.Checked = this.checkedAllData;
+      x.Checked = this.isCheckedAll;
     });
   }
 
-  dataCheckChange(item: any): void {
+  /**
+   * 单个勾选
+   * @param item
+   */
+  dataItemCheckChange(item: any): void {
     item.Checked = !item.Checked;
   }
 
+  /**
+   * 列表数量变更
+   */
+  pageSizeChange(): void {
+    this.queryParam.PageIndex = 1;
+    this.queryList();
+  }
+
+  /**
+   * 跳转到新增
+   */
   addNew(): void {
-    this.router.navigateByUrl('/admin/addClass');
+    this.router.navigateByUrl('/admin/class/addClass');
   }
 
+  /**
+   * 编辑
+   */
   editOne(): void {
-    this.dataArr.map(x => {
-      if (x.Checked) {
-        this.router.navigateByUrl('/admin/addClass?id=' + x.Id);
-      }
-    });
+    const selectDataArr = this.dataArr.filter(x => x.Checked);
+    if (selectDataArr.length <= 0) {
+      return;
+    }
+    if (selectDataArr.length > 1) {
+      this.dialogService.showDialog('只能选中一条数据编辑！', null, null);
+      return;
+    }
+    const item = selectDataArr[0];
+    this.router.navigateByUrl('/admin/class/addClass?id=' + item.Id);
   }
 
+  /**
+   * 删除
+   */
   delete(): void {
+    const selectDataArr = this.dataArr.filter(x => x.Checked);
+    if (selectDataArr.length <= 0) {
+      return;
+    }
 
+    this.dialogService.showConfirmDialog('确定要删除选中的数据吗！', arr => {
+      this.isCheckedAll = false;
+      arr.map(x => {
+        const url = this.deleteUrl + '?id=' + x.Id;
+        this.httpClient.getByHttpClient(url).subscribe(res => {
+          if (res.StatusCode === StatusCode.SUCCESS) {
+            this.queryList();
+          }
+        });
+      });
+    }, selectDataArr);
   }
 
 }
+
+
+

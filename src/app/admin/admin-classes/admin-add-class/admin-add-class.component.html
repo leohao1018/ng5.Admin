@@ -23,8 +23,11 @@
             <h3 class="box-title">保存功课</h3>
           </div>
           <!-- /.box-header -->
+          <div class="default-loading-container">
+            <ngx-loading [show]="isShowDataLoading" [config]="dataLoadingConfig"></ngx-loading>
+          </div>
           <!-- form start -->
-          <form class="form-horizontal" name="form" (ngSubmit)="f.form.valid && add()" #f="ngForm" novalidate>
+          <form class="form-horizontal" name="form" (ngSubmit)="f.form.valid && save()" #f="ngForm" novalidate>
             <div class="box-body">
               <div class="form-group has-feedback col-md-6" [ngClass]="{ 'has-error': f.submitted && !Subject.valid }">
                 <label for="txtSubject" class="col-md-4 control-label">标题</label>
@@ -156,8 +159,8 @@
             <div class="box-footer">
               <div style="text-align: center;">
                 <p>
-                  <img *ngIf="showLoading" src="../../../../assets/img/loading.gif" height="16" width="16"/>
-                  <button [disabled]="loading" type="submit" class="btn btn-primary btn-flat btn-sm">
+                  <img *ngIf="isShowLoading" src="../../../../assets/img/loading.gif" height="16" width="16"/>
+                  <button [disabled]="isShowLoading" type="submit" class="btn btn-primary btn-flat btn-sm">
                     <i class="fa fa-save"></i>
                     保存
                   </button>

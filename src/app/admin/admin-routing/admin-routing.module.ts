@@ -33,12 +33,17 @@ import {LoggedInGuard} from '../../login/logged-in-guard';
             component: AdminContentComponent
           },
           {
-            path: 'classes',
-            component: AdminClassesComponent
-          },
-          {
-            path: 'addClass',
-            component: AdminAddClassComponent
+            path: 'class',
+            children: [
+              {
+                path: 'classes',
+                component: AdminClassesComponent
+              },
+              {
+                path: 'addClass',
+                component: AdminAddClassComponent
+              }
+            ],
           }
         ],
         canActivate: [LoggedInGuard]

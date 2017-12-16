@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
           this.authService.login(JSON.stringify(loginToken));
         }
         this.loading = false;
-        window.location.href = '/admin/dashboard1';
+        window.location.href = '/admin/class/classes';
         // this.router.navigateByUrl('/admin/dashboard1');// 这种方式会有样式报错
       })
       .catch(error => {
@@ -50,11 +50,5 @@ export class LoginComponent implements OnInit {
    * */
   private initPage() {
     jQuery('body').addClass('hold-transition login-page');
-
-    jQuery('input').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue',
-      radioClass: 'iradio_minimal-blue',
-      increaseArea: '20%' // optional
-    });
   }
 }
