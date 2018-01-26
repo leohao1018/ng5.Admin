@@ -29,5 +29,9 @@ export class SocialClassDto {
 
   TypeString: string;
 
+  SubType: number;
+
+  SubTypeString: string;
+
 }
 

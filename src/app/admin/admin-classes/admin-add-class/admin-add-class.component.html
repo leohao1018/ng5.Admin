@@ -46,15 +46,31 @@
                   <select class="form-control" name="Type" id="txtType" [(ngModel)]="currentEntity.Type"
                           #Type="ngModel"
                           required>
-                    <option value="0">诵经</option>
-                    <option value="1">打坐</option>
-                    <option value="2">持咒</option>
-                    <option value="3">抄经</option>
+                    <option value="1">诵经</option>
+                    <option value="2">打坐</option>
+                    <option value="3">持咒</option>
+                    <option value="4">抄经</option>
+                    <option value="5">念佛</option>
                   </select>
                   <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
                   <div *ngIf="f.submitted && !Type.valid" class="help-block">类型必填</div>
                 </div>
               </div>
+
+              <div *ngIf="currentEntity.Type == 0" class="form-group has-feedback col-md-6" [ngClass]="{ 'has-error': f.submitted && !Type.valid }">
+                <label for="txtSubType" class="col-md-4 control-label">类型</label>
+                <div class="col-sm-8">
+                  <select class="form-control" name="subType" id="txtSubType" [(ngModel)]="currentEntity.SubType"
+                          #Type="ngModel"
+                          required>
+                    <option value="0">国语版</option>
+                    <option value="1">熟练版</option>
+                  </select>
+                  <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
+                  <div *ngIf="f.submitted && !Type.valid" class="help-block">类型必填</div>
+                </div>
+              </div>
+
               <div class="form-group has-feedback col-md-12" [ngClass]="{ 'has-error': f.submitted && !Content.valid }">
                 <label for="txtContent" class="col-md-2 control-label">内容</label>
                 <div class="col-sm-10">

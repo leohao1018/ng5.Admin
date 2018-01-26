@@ -91,6 +91,9 @@ export class AdminAddClassComponent implements OnInit {
 
   save(): void {
     this.isShowLoading = true;
+    if (this.currentEntity.Type != 0)
+      this.currentEntity.SubType = undefined
+
     const urlMethod = this.currentEntity.Id > 0 ? `modify?id=${this.currentEntity.Id}` : 'add';
     const url = AppSetting.apiBaseUrl + `SocialClass/${urlMethod}`;
     this.httpService.postByHttpClient(url, this.currentEntity).subscribe(res => {

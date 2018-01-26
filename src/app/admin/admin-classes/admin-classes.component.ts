@@ -77,20 +77,24 @@ export class AdminClassesComponent implements OnInit {
       this.dataArr.map(x => {
         x.Index = index++;
         switch (x.Type) {
-          case 0 : {
+          case 1 : {
             x.TypeString = '诵经';
             break;
           }
-          case 1 : {
+          case 2 : {
             x.TypeString = '打坐';
             break;
           }
-          case 2 : {
+          case 3 : {
             x.TypeString = '持咒';
             break;
           }
-          case 3 : {
+          case 4 : {
             x.TypeString = '抄经';
+            break;
+          }
+          case 5 : {
+            x.TypeString = '念佛';
             break;
           }
           default: {

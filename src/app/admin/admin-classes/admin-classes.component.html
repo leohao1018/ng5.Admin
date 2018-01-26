@@ -87,9 +87,9 @@
             <h3 class="box-title">功课列表</h3>
             <div class="box-tools">
               <div class="input-group input-group-sm">
-                <div class="checkbox checkbox-primary checkbox-inline">
-                  <input type="checkbox" class="styled" name="checkToolAll" (click)="checkAll()" [(ngModel)]="isCheckedAll">
-                  <label >全选</label>
+                <div class="checkbox-inline">
+                  <input type="checkbox" class="styled" name="checkToolAll" (click)="checkAll()" [(ngModel)]="isCheckedAll">全选
+                  <label></label>
                 </div>
                 <div class="checkbox-inline">
                   <p style="margin-bottom: 0">
@@ -128,7 +128,7 @@
               <tr
                 *ngFor="let item of dataArr | paginate: { itemsPerPage: queryParam.PageSize, currentPage: queryParam.PageIndex, totalItems: totalCount}">
                 <td>
-                  <div class="checkbox checkbox-primary">
+                  <div class="">
                     <input class="styled" type="checkbox" name="checkTool" (click)="dataItemCheckChange(item)"
                            [(ngModel)]="item.Checked">
                     <label></label>
