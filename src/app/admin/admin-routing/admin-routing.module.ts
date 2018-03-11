@@ -9,6 +9,8 @@ import {AdminContentComponent} from '../admin-content/admin-content.component';
 import {AdminClassesComponent} from '../admin-classes/admin-classes.component';
 import {AdminAddClassComponent} from '../admin-classes/admin-add-class/admin-add-class.component';
 import {LoggedInGuard} from '../../login/logged-in-guard';
+import {AdminSystemDynamicComponent} from "../admin-system-dynamic/admin-system-dynamic.component";
+import {AdminAddSystemDynamicComponent} from "../admin-system-dynamic/admin-add-system-dynamic/admin-add-system-dynamic.component";
 
 @NgModule({
   imports: [
@@ -36,12 +38,25 @@ import {LoggedInGuard} from '../../login/logged-in-guard';
             path: 'class',
             children: [
               {
-                path: 'classes',
+                path: 'list',
                 component: AdminClassesComponent
               },
               {
-                path: 'addClass',
+                path: 'info',
                 component: AdminAddClassComponent
+              }
+            ],
+          },
+          {
+            path: 'systemDynamic',
+            children: [
+              {
+                path: 'list',
+                component: AdminSystemDynamicComponent
+              },
+              {
+                path: 'info',
+                component: AdminAddSystemDynamicComponent
               }
             ],
           }

@@ -1,7 +1,6 @@
 import {BaseDto} from './base-dto';
 
-export class SocialClassDto extends BaseDto {
-
+export class SocialDynamicDto extends BaseDto {
   AddId: string;
 
   AddTime: string;
@@ -12,9 +11,9 @@ export class SocialClassDto extends BaseDto {
 
   LogicallyDelete: boolean;
 
-  Subject: string;
+  AccountId: number;
 
-  Content: string;
+  Subject: string;
 
   PicId: string;
 
@@ -22,13 +21,6 @@ export class SocialClassDto extends BaseDto {
 
   VideoId: string;
 
-  Type: number;
-
-  TypeString: string;
-
-  SubType: number;
-
-  SubTypeString: string;
+  Scope: number;
 
 }
-

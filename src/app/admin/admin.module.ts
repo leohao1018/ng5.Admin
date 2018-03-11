@@ -25,7 +25,9 @@ import {HttpInterceptorService} from '../util/http-interceptor-service.service';
 import {NgxPaginationModule} from 'ngx-pagination';                               // 分页组件 <-- import the module
 
 import {BootstrapModalModule} from 'ngx-modialog/plugins/bootstrap';  // 弹窗模块
-import {ModalModule} from 'ngx-modialog';                             // 弹窗模块
+import {ModalModule} from 'ngx-modialog';                             // 弹窗;
+import { AdminSystemDynamicComponent } from './admin-system-dynamic/admin-system-dynamic.component';
+import { AdminAddSystemDynamicComponent } from './admin-system-dynamic/admin-add-system-dynamic/admin-add-system-dynamic.component';
 import {DialogService} from '../util/dialog-service';                 // 弹窗模块封装
 
 @NgModule({
@@ -56,6 +58,8 @@ import {DialogService} from '../util/dialog-service';                 // 弹窗�
     AdminControlSidebarComponent,
     AdminDashboard1Component,
     AdminDashboard2Component,
+    AdminSystemDynamicComponent,
+    AdminAddSystemDynamicComponent,
     AdminClassesComponent,
     AdminAddClassComponent,
   ],

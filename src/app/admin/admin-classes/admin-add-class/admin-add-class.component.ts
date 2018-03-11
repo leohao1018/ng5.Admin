@@ -21,7 +21,7 @@ import {DialogService} from '../../../util/dialog-service';
 @Component({
   selector: 'app-admin-add-class',
   templateUrl: './admin-add-class.component.html',
-  styleUrls: ['./admin-add-class.component.css']
+  styleUrls: []
 })
 export class AdminAddClassComponent implements OnInit {
   currentEntity: SocialClassDto = new SocialClassDto();
@@ -91,8 +91,9 @@ export class AdminAddClassComponent implements OnInit {
 
   save(): void {
     this.isShowLoading = true;
-    if (this.currentEntity.Type != 0)
-      this.currentEntity.SubType = undefined
+    if (this.currentEntity.Type !== 0) {
+      this.currentEntity.SubType = undefined;
+    }
 
     const urlMethod = this.currentEntity.Id > 0 ? `modify?id=${this.currentEntity.Id}` : 'add';
     const url = AppSetting.apiBaseUrl + `SocialClass/${urlMethod}`;
@@ -100,7 +101,7 @@ export class AdminAddClassComponent implements OnInit {
       if (res.StatusCode === StatusCode.SUCCESS) {
         this.dialogService.showDialog(res.StatusDescription,
           param => {
-            this.router.navigateByUrl('admin/class/classes');
+            this.router.navigateByUrl('admin/class/list');
           },
           null);
         this.isShowLoading = false;
@@ -181,7 +182,7 @@ export class AdminAddClassComponent implements OnInit {
   }
 
   goListPage(): void {
-    this.router.navigateByUrl('/admin/class/classes');
+    this.router.navigateByUrl('/admin/class/list');
   }
 
 }

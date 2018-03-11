@@ -12,7 +12,7 @@ import {AuthService} from './auth-service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: []
 })
 export class LoginComponent implements OnInit {
   user: UserModel = {username: '', password: '', remember: false};
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
           this.authService.login(JSON.stringify(loginToken));
         }
         this.loading = false;
-        window.location.href = '/admin/class/classes';
+        window.location.href = '/admin/class/list';
         // this.router.navigateByUrl('/admin/dashboard1');// 这种方式会有样式报错
       })
       .catch(error => {

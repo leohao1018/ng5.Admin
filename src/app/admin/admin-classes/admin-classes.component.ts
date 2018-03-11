@@ -10,7 +10,7 @@ import {DialogService} from '../../util/dialog-service';
 @Component({
   selector: 'app-admin-classes',
   templateUrl: './admin-classes.component.html',
-  styleUrls: ['./admin-classes.component.css']
+  styleUrls: []
 })
 
 export class AdminClassesComponent implements OnInit {
@@ -146,7 +146,7 @@ export class AdminClassesComponent implements OnInit {
    * 跳转到新增
    */
   addNew(): void {
-    this.router.navigateByUrl('/admin/class/addClass');
+    this.router.navigateByUrl('/admin/class/info');
   }
 
   /**
@@ -162,7 +162,7 @@ export class AdminClassesComponent implements OnInit {
       return;
     }
     const item = selectDataArr[0];
-    this.router.navigateByUrl('/admin/class/addClass?id=' + item.Id);
+    this.router.navigateByUrl('/admin/class/info?id=' + item.Id);
   }
 
   /**

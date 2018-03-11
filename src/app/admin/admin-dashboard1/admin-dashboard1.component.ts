@@ -13,7 +13,7 @@ declare var AdminLTE: any;
 @Component({
   selector: 'app-admin-dashboard1',
   templateUrl: './admin-dashboard1.component.html',
-  styleUrls: ['./admin-dashboard1.component.css']
+  styleUrls: []
 })
 export class AdminDashboard1Component implements OnInit {
   linechart: morris.GridChart;

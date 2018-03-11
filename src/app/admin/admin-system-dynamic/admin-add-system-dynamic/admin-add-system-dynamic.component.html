@@ -1,0 +1,382 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      系统动态管理
+      <small>发布系统动态</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> 后台管理</a></li>
+      <li><a href="#">系统动态</a></li>
+      <li class="active">发布</li>
+    </ol>
+  </section>
+  <!-- Main content -->
+  <!-- Main content -->
+  <section class="content">
+    <div class="row" *ngIf="!isUploadShow">
+      <div class="col-md-12">
+        <!-- Horizontal Form -->
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">{{ currentAccount.AccountName }} ——> 发布动态</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="default-loading-container">
+            <ngx-loading [show]="isShowDataLoading" [config]="dataLoadingConfig"></ngx-loading>
+          </div>
+          <!-- form start -->
+          <form class="form-horizontal" name="form" (ngSubmit)="f.form.valid && save()" #f="ngForm" novalidate>
+            <div class="box-body">
+              <div class="form-group has-feedback col-md-12" [ngClass]="{ 'has-error': f.submitted && !Account.valid }">
+                <label for="selectAccount" class="col-md-2 control-label">系统账号</label>
+                <div class="col-sm-10">
+                  <select class="form-control" id="selectAccount" name="Account"
+                          [(ngModel)]="currentAccount.Id"
+                          #Account="ngModel"
+                          (ngModelChange)="changeAccount($event)"
+                          required>
+                    <option *ngFor="let item of accountList" [value]='item.Id'>{{ item.AccountName || '请选择' }}</option>
+                  </select>
+                  <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
+                  <div *ngIf="f.submitted && !Account.valid" class="help-block">内容必填</div>
+                </div>
+              </div>
+
+              <div class="form-group has-feedback col-md-12" [ngClass]="{ 'has-error': f.submitted && !Subject.valid }">
+                <label for="txtSubject" class="col-md-2 control-label">内容</label>
+                <div class="col-sm-10">
+                  <textarea type="text" class="form-control" name="Subject" id="txtSubject"
+                            [(ngModel)]="currentEntity.Subject"
+                            #Subject="ngModel"
+                            required rows="8"
+                  ></textarea>
+                  <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
+                  <div *ngIf="f.submitted && !Subject.valid" class="help-block">内容必填</div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-12">
+                <label class="col-sm-2 control-label">图片附件</label>
+                <div class="col-sm-10">
+                  <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.PicId)">
+                    <i class="fa fa-fw fa-upload"></i>点击上传
+                  </a>
+                </div>
+              </div>
+              <div class="form-group col-md-12" *ngIf="picAttachmentList && picAttachmentList.length > 0">
+                <label class="col-sm-2 control-label">图片列表</label>
+                <div class="col-sm-5">
+                  <ul class="todo-list ui-sortable">
+                    <li *ngFor="let attr of picAttachmentList">
+                      <!-- drag handle -->
+                      <span class="handle ui-sortable-handle">
+                          <i class="fa fa-ellipsis-v"></i>
+                          <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <span class="text">{{ attr.Name }}</span>
+                      <div class="tools">
+                        <!--<i class="fa fa-edit"></i>-->
+                        <i class="fa fa-fw fa-eye" (click)="viewAttachment(attr)" title="查看"></i>
+                        &nbsp;&nbsp;
+                        <i class="fa fa-trash-o" (click)="deleteAttachment(attr)" title="删除"></i>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-group col-md-12">
+                <label class="col-sm-2 control-label">音频附件</label>
+                <div class="col-sm-10">
+                  <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.MusicId)">
+                    <i class="fa fa-fw fa-upload"></i>点击上传
+                  </a>
+                </div>
+              </div>
+              <div class="form-group col-md-12" *ngIf="musicAttachmentList && musicAttachmentList.length > 0">
+                <label class="col-sm-2 control-label">音频列表</label>
+                <div class="col-sm-5">
+                  <ul class="todo-list ui-sortable">
+                    <li *ngFor="let attr of musicAttachmentList">
+                      <!-- drag handle -->
+                      <span class="handle ui-sortable-handle">
+                          <i class="fa fa-ellipsis-v"></i>
+                          <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <span class="text">{{ attr.Name }}</span>
+                      <div class="tools">
+                        <!--<i class="fa fa-edit"></i>-->
+                        <i class="fa fa-fw fa-eye" (click)="viewAttachment(attr)" title="查看"></i>
+                        &nbsp;&nbsp;
+                        <i class="fa fa-trash-o" (click)="deleteAttachment(attr)" title="删除"></i>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-group col-md-12">
+                <label class="col-sm-2 control-label">视频附件</label>
+                <div class="col-sm-10">
+                  <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.VideoId)">
+                    <i class="fa fa-fw fa-upload"></i>点击上传
+                  </a>
+                </div>
+              </div>
+              <div class="form-group col-md-12" *ngIf="videoAttachmentList && videoAttachmentList.length > 0">
+                <label class="col-sm-2 control-label">视频列表</label>
+                <div class="col-sm-5">
+                  <ul class="todo-list ui-sortable">
+                    <li *ngFor="let attr of videoAttachmentList">
+                      <!-- drag handle -->
+                      <span class="handle ui-sortable-handle">
+                          <i class="fa fa-ellipsis-v"></i>
+                          <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <span class="text">{{ attr.Name }}</span>
+                      <div class="tools">
+                        <!--<i class="fa fa-edit"></i>-->
+                        <i class="fa fa-fw fa-eye" (click)="viewAttachment(attr)" title="查看"></i>
+                        <i class="fa fa-trash-o" (click)="deleteAttachment(attr)" title="删除"></i>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="box-footer">
+              <div style="text-align: center;">
+                <p>
+                  <img *ngIf="isShowLoading" src="../../../../assets/img/loading.gif" height="16" width="16"/>
+                  <button [disabled]="isShowLoading" type="submit" class="btn btn-primary btn-flat btn-sm">
+                    <i class="fa fa-save"></i>
+                    保存
+                  </button>
+                  <button type="button" class="btn btn-primary btn-flat btn-sm" (click)="goListPage()">
+                    <i class="fa fa-rotate-left"></i>
+                    返回列表
+                  </button>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- /.box -->
+        <!-- general form elements disabled -->
+        <!-- /.box -->
+      </div>
+    </div>
+    <!-- /.row -->
+
+    <!--数据列表-->
+    <div class="row" *ngIf="!isUploadShow">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">已发布动态列表</h3>
+            <div class="box-tools">
+              <div class="input-group input-group-sm">
+                <div class="checkbox checkbox-primary checkbox-inline">
+                  <input type="checkbox" class="styled" name="checkToolAll" (click)="checkAll()"
+                         [(ngModel)]="isCheckedAll">
+                  <label>全选</label>
+                </div>
+                <div class="checkbox-inline">
+                  <p style="margin-bottom: 0">
+                    <button class="btn btn-default  btn-xs btn-flat" (click)="addNew()">
+                      <i class="fa fa-plus-square"></i>
+                      新增
+                    </button>
+                    <button class="btn btn-primary  btn-xs btn-flat" (click)="editOne()">
+                      <i class="fa fa-fw fa-edit"></i>
+                      编辑/查看
+                    </button>
+                    <button class="btn btn-danger  btn-xs btn-flat" (click)="delete()">
+                      <i class="fa fa-minus-square"></i>
+                      删除
+                    </button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="default-loading-container">
+            <ngx-loading [show]="isShowDataLoadingForList"></ngx-loading>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <tr>
+                <th style="width: 5%">操作</th>
+                <th style="width: 5%">#</th>
+                <th>主题/内容</th>
+                <th style="width: 10%">其他</th>
+              </tr>
+              <tr
+                *ngFor="let item of dataArr | paginate: { itemsPerPage: queryParam.PageSize, currentPage: queryParam.PageIndex, totalItems: totalCount}"
+                (click)="dataItemCheckChange(item)">
+                <td>
+                  <div class="checkbox checkbox-primary checkbox-inline">
+                    <!--(click)="dataItemCheckChange(item)"-->
+                    <input class="styled" type="checkbox" name="checkTool"
+                           [(ngModel)]="item.Checked">
+                    <label></label>
+                  </div>
+                </td>
+                <td>{{ item.Index }}</td>
+                <td>{{ item.Subject }}</td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer clearfix">
+            <div class="has-text-centered pull-right">
+              <pagination-controls (pageChange)="pageChange($event)"
+                                   previousLabel="上一页"
+                                   nextLabel="下一页"
+                                   screenReaderPaginationLabel="Pagination"
+                                   screenReaderPageLabel="page"
+                                   screenReaderCurrentLabel="You're on page"></pagination-controls>
+            </div>
+            <div class="pull-right">
+              <select class="form-control sel-page-size" name="PageSize" id="txtPageSize"
+                      [(ngModel)]="queryParam.PageSize"
+                      #PageSize="ngModel"
+                      (change)="pageSizeChange()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+
+    <div class="row" *ngIf="isUploadShow">
+      <div class="col-md-12">
+        <!-- Horizontal Form -->
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">附件上传</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="col-md-3">
+              <h3>Select files</h3>
+              <div ng2FileDrop
+                   [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                   (fileOver)="fileOverBase($event)"
+                   [uploader]="uploader"
+                   class="well my-drop-zone">
+                Base drop zone
+              </div>
+              <div ng2FileDrop
+                   [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}"
+                   (fileOver)="fileOverAnother($event)"
+                   [uploader]="uploader"
+                   class="well my-drop-zone">
+                Another drop zone
+              </div>
+              Multiple
+              <input type="file" ng2FileSelect [uploader]="uploader" multiple/><br/>
+            </div>
+            <div class="col-md-9" style="margin-bottom: 40px">
+              <h3>Upload queue</h3>
+              <p>Queue length: {{ uploader?.queue?.length }}</p>
+              <table class="table">
+                <thead>
+                <tr>
+                  <th width="50%">Name</th>
+                  <th>Size</th>
+                  <th>Progress</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of uploader.queue">
+                  <td><strong>{{ item?.file?.name }}</strong></td>
+                  <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                  <td *ngIf="uploader.isHTML5">
+                    <div class="progress" style="margin-bottom: 0;">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                    <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                    <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                  </td>
+                  <td nowrap>
+                    <button type="button" class="btn btn-success btn-xs"
+                            (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                      <span class="glyphicon glyphicon-upload"></span> Upload
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs"
+                            (click)="item.cancel()" [disabled]="!item.isUploading">
+                      <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs"
+                            (click)="item.remove()">
+                      <span class="glyphicon glyphicon-trash"></span> Remove
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <div>
+                <div>
+                  Queue progress:
+                  <div class="progress" style="">
+                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-success btn-s"
+                        (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                  <span class="glyphicon glyphicon-upload"></span> Upload all
+                </button>
+                <button type="button" class="btn btn-warning btn-s"
+                        (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                  <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                </button>
+                <button type="button" class="btn btn-danger btn-s"
+                        (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                  <span class="glyphicon glyphicon-trash"></span> Remove all
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-footer">
+            <div class="col-md-10"></div>
+            <div class="col-md-1">
+              <img *ngIf="loading" class="pull-right"
+                   src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+            </div>
+            <div class="col-md-1">
+              <button type="button" (click)="closeUpload()" class="btn btn-primary btn-flat pull-right">
+                <i class="fa fa-close"></i>
+                关闭
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- /.box -->
+        <!-- general form elements disabled -->
+        <!-- /.box -->
+      </div>
+    </div>
+  </section>
+  <!-- /.content -->
+</div>
+
+
+
