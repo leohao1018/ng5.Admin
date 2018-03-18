@@ -91,7 +91,7 @@ export class AdminAddClassComponent implements OnInit {
 
   save(): void {
     this.isShowLoading = true;
-    if (this.currentEntity.Type !== 0) {
+    if (this.currentEntity.Type !== 1) {
       this.currentEntity.SubType = undefined;
     }
 

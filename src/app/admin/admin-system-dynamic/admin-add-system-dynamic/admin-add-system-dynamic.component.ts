@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Renderer2} from '@angular/core';
+import {Component, Input, OnInit, Renderer2} from '@angular/core';
 import {ANIMATION_TYPES} from 'ngx-loading';
 import {DialogService} from '../../../util/dialog-service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -20,13 +20,10 @@ export class AdminAddSystemDynamicComponent implements OnInit {
 
   accountList = [];
   currentAccount = {Id: undefined, AccountName: undefined};
-  currentEntity: SocialDynamicDto = new SocialDynamicDto();
+  currentEntity;
   picAttachmentList = [];
   musicAttachmentList = [];
   videoAttachmentList = [];
-
-  // accountId: number;
-  // accountName: String;
 
   isShowDataLoading = false;
   isShowDataLoadingForList = false;
@@ -75,9 +72,7 @@ export class AdminAddSystemDynamicComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe((params: Params) => {
       this.currentAccount = {Id: params['accountId'], AccountName: params['accountName']};
-      this.currentEntity.PicId = UUID.UUID();
-      this.currentEntity.MusicId = UUID.UUID();
-      this.currentEntity.VideoId = UUID.UUID();
+      this.resetPageData();
 
       this.queryCurrentDynamics();
       this.loadPublishAccount();
@@ -135,6 +130,11 @@ export class AdminAddSystemDynamicComponent implements OnInit {
    */
   resetPageData(): void {
     this.currentEntity = new SocialDynamicDto();
+
+    this.currentEntity.PicId = UUID.UUID();
+    this.currentEntity.MusicId = UUID.UUID();
+    this.currentEntity.VideoId = UUID.UUID();
+
     this.picAttachmentList = [];
     this.musicAttachmentList = [];
     this.videoAttachmentList = [];

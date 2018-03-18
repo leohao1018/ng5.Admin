@@ -57,7 +57,8 @@
                 </div>
               </div>
 
-              <div *ngIf="currentEntity.Type == 0" class="form-group has-feedback col-md-6" [ngClass]="{ 'has-error': f.submitted && !Type.valid }">
+              <div *ngIf="currentEntity.Type == 1" class="form-group has-feedback col-md-6"
+                   [ngClass]="{ 'has-error': f.submitted && !Type.valid }">
                 <label for="txtSubType" class="col-md-4 control-label">类型</label>
                 <div class="col-sm-8">
                   <select class="form-control" name="subType" id="txtSubType" [(ngModel)]="currentEntity.SubType"
@@ -84,7 +85,7 @@
               </div>
 
               <div class="form-group col-md-12">
-                <label for="" class="col-sm-2 control-label">图片附件</label>
+                <label class="col-sm-2 control-label">图片附件</label>
                 <div class="col-sm-10">
                   <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.PicId)">
                     <i class="fa fa-fw fa-upload"></i>点击上传
@@ -92,7 +93,7 @@
                 </div>
               </div>
               <div class="form-group col-md-12" *ngIf="picAttachmentList && picAttachmentList.length > 0">
-                <label for="" class="col-sm-2 control-label">图片列表</label>
+                <label class="col-sm-2 control-label">图片列表</label>
                 <div class="col-sm-5">
                   <ul class="todo-list ui-sortable">
                     <li *ngFor="let attr of picAttachmentList">
@@ -114,7 +115,7 @@
               </div>
 
               <div class="form-group col-md-12">
-                <label for="" class="col-sm-2 control-label">音频附件</label>
+                <label class="col-sm-2 control-label">音频附件</label>
                 <div class="col-sm-10">
                   <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.MusicId)">
                     <i class="fa fa-fw fa-upload"></i>点击上传
@@ -122,7 +123,7 @@
                 </div>
               </div>
               <div class="form-group col-md-12" *ngIf="musicAttachmentList && musicAttachmentList.length > 0">
-                <label for="" class="col-sm-2 control-label">音频列表</label>
+                <label class="col-sm-2 control-label">音频列表</label>
                 <div class="col-sm-5">
                   <ul class="todo-list ui-sortable">
                     <li *ngFor="let attr of musicAttachmentList">
@@ -143,8 +144,8 @@
                 </div>
               </div>
 
-              <div class="form-group col-md-12">
-                <label for="" class="col-sm-2 control-label">视频附件</label>
+              <div class="form-group col-md-12" hidden>
+                <label class="col-sm-2 control-label">视频附件</label>
                 <div class="col-sm-10">
                   <a class="btn btn-primary btn-sm btn-flat" (click)="uploadAttr(currentEntity.VideoId)">
                     <i class="fa fa-fw fa-upload"></i>点击上传
@@ -152,7 +153,7 @@
                 </div>
               </div>
               <div class="form-group col-md-12" *ngIf="videoAttachmentList && videoAttachmentList.length > 0">
-                <label for="" class="col-sm-2 control-label">视频列表</label>
+                <label class="col-sm-2 control-label">视频列表</label>
                 <div class="col-sm-5">
                   <ul class="todo-list ui-sortable">
                     <li *ngFor="let attr of videoAttachmentList">
