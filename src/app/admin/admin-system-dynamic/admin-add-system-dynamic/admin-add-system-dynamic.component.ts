@@ -231,13 +231,27 @@ export class AdminAddSystemDynamicComponent implements OnInit {
     const url = AppSetting.apiBaseUrl + `SocialDynamic/GetLatest`;
     this.httpService.postByHttpClient(url, this.queryParam).subscribe(res => {
       if (res.StatusCode === StatusCode.SUCCESS) {
+
+        this.totalCount = res.TotalCount;
         this.dataArr = res.Result as SocialDynamicDto[];
         this.dataArr.forEach((x, index) => {
           x.Index = index + 1;
+          if (x.AccountUser) {
+            x.AccountUserName = x.AccountUser.UserName;
+          }
         });
       }
       this.isShowDataLoadingForList = false;
     });
+  }
+
+  /**
+   * 分页点击
+   * @param $event
+   */
+  pageChange($event: any): void {
+    this.queryParam.PageIndex = $event;
+    this.queryCurrentDynamics();
   }
 
   /**
@@ -347,12 +361,14 @@ export class AdminAddSystemDynamicComponent implements OnInit {
   }
 
   changeAccount($event: string): void {
-    this.setCurrentAccount(parseInt($event));
+    this.setCurrentAccount(parseInt($event, 10));
     this.queryCurrentDynamics();
   }
 
   private setCurrentAccount(AccountId: number) {
     const selected = this.accountList.find(x => x.Id === AccountId);
-    this.currentAccount = {Id: selected.Id, AccountName: selected.AccountName};
+    if (selected) {
+      this.currentAccount = {Id: selected.Id, AccountName: selected.AccountName};
+    }
   }
 }

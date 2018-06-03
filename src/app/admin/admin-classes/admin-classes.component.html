@@ -44,10 +44,11 @@
                 <div class="col-sm-8">
                   <select class="form-control" name="Type" id="txtType" [(ngModel)]="queryParam.Type"
                           #Type="ngModel">
-                    <option value="0">诵经</option>
-                    <option value="1">打坐</option>
-                    <option value="2">持咒</option>
-                    <option value="3">抄经</option>
+                    <option value="1">诵经</option>
+                    <option value="2">打坐</option>
+                    <option value="3">持咒</option>
+                    <option value="4">抄经</option>
+                    <option value="5">念佛</option>
                   </select>
                   <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
                   <div *ngIf="f.submitted && !Type.valid" class="help-block">类型必填</div>

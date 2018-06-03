@@ -1,4 +1,5 @@
 import {BaseDto} from './base-dto';
+import {SystemAccountUserDto} from './system-account-user-dto';
 
 export class SocialDynamicDto extends BaseDto {
   AddId: string;
@@ -23,4 +24,6 @@ export class SocialDynamicDto extends BaseDto {
 
   Scope: number;
 
+  AccountUser: SystemAccountUserDto;
+  AccountUserName: string;
 }
