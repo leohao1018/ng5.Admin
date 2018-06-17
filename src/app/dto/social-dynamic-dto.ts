@@ -22,8 +22,14 @@ export class SocialDynamicDto extends BaseDto {
 
   VideoId: string;
 
+
+  Musics: string[];
+  Pics: string[];
+  Videos: string[];
+
   Scope: number;
 
   AccountUser: SystemAccountUserDto;
+
   AccountUserName: string;
 }

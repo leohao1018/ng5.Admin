@@ -11,6 +11,7 @@ import {AdminAddClassComponent} from '../admin-classes/admin-add-class/admin-add
 import {LoggedInGuard} from '../../login/logged-in-guard';
 import {AdminSystemDynamicComponent} from "../admin-system-dynamic/admin-system-dynamic.component";
 import {AdminAddSystemDynamicComponent} from "../admin-system-dynamic/admin-add-system-dynamic/admin-add-system-dynamic.component";
+import {AdminComplainComponent} from "../admin-complain/admin-complain.component";
 
 @NgModule({
   imports: [
@@ -57,6 +58,15 @@ import {AdminAddSystemDynamicComponent} from "../admin-system-dynamic/admin-add-
               {
                 path: 'info',
                 component: AdminAddSystemDynamicComponent
+              }
+            ],
+          },
+          {
+            path: 'complain',
+            children: [
+              {
+                path: 'list',
+                component: AdminComplainComponent
               }
             ],
           }

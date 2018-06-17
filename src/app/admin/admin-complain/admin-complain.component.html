@@ -45,10 +45,7 @@
                   <select class="form-control" name="Type" id="txtType" [(ngModel)]="queryParam.Type"
                           #Type="ngModel">
                     <option value="1">诵经</option>
-                    <option value="2">打坐</option>
-                    <option value="3">持咒</option>
-                    <option value="4">抄经</option>
-                    <option value="5">念佛</option>
+
                   </select>
                   <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
                   <div *ngIf="f.submitted && !Type.valid" class="help-block">类型必填</div>
@@ -95,14 +92,14 @@
                 </div>
                 <div class="checkbox-inline">
                   <p style="margin-bottom: 0">
-                    <button class="btn btn-default  btn-xs btn-flat" (click)="addNew()">
-                      <i class="fa fa-plus-square"></i>
-                      新增
-                    </button>
-                    <button class="btn btn-primary  btn-xs btn-flat" (click)="editOne()">
-                      <i class="fa fa-fw fa-edit"></i>
-                      编辑
-                    </button>
+                    <!--<button class="btn btn-default  btn-xs btn-flat" (click)="addNew()">-->
+                    <!--<i class="fa fa-plus-square"></i>-->
+                    <!--新增-->
+                    <!--</button>-->
+                    <!--<button class="btn btn-primary  btn-xs btn-flat" (click)="editOne()">-->
+                    <!--<i class="fa fa-fw fa-edit"></i>-->
+                    <!--编辑-->
+                    <!--</button>-->
                     <button class="btn btn-danger  btn-xs btn-flat" (click)="delete()">
                       <i class="fa fa-minus-square"></i>
                       删除
@@ -122,9 +119,12 @@
               <tr>
                 <th style="width: 5%">操作</th>
                 <th style="width: 5%">#</th>
-                <th>标题</th>
-                <th>类别</th>
-                <th>添加时间</th>
+                <th>动态主题</th>
+                <th>发布用户</th>
+                <th>状态</th>
+                <th>举报类型</th>
+                <th>举报内容</th>
+                <th>举报时间</th>
                 <th style="width: 10%">其他</th>
               </tr>
               <tr
@@ -138,11 +138,16 @@
                   </div>
                 </td>
                 <td>{{ item.Index }}</td>
-                <td>{{ item.Subject }}</td>
-                <td>{{ item.TypeString }}</td>
+                <td>{{ item.Dynamic.Subject }}</td>
+                <td>{{ item.Dynamic.AccountUser.UserName }}</td>
+                <td>{{ item.IsDynamicDeleteStr }}</td>
+                <td>{{ item.Type }}</td>
+                <td>{{ item.ComplainContent }}</td>
                 <td>{{ item.AddTime }}</td>
                 <td>
-                  <!--<span class="label label-success">Approved</span>-->
+                  <a class="label label-primary" (click)="viewDynamicDetail($event, item)">
+                    <i class="fa fa-fw fa-eye"></i> 查看
+                  </a>
                 </td>
               </tr>
             </table>
@@ -176,4 +181,58 @@
     </div>
   </section>
   <!-- /.content -->
+
+
+  <button id="openModalButton" [hidden]="true" data-toggle="modal" data-target="#modal-default">Open Modal</button>
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">动态详情</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal">
+            <div class="box-body">
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">主题</label>
+                <div class="col-sm-10">
+                  <textarea type="text"
+                            class="form-control"
+                            name="viewDynamicSubject"
+                            rows="3"
+                            [(ngModel)]="viewDynamicSubject"
+                            readonly="readonly"></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">图片</label>
+                <div class="col-sm-10">
+                  <div *ngFor="let sourceUrl of viewDynamicPics">
+                    <img class="img-responsive" src="{{sourceUrl}}" alt="Photo">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- /.box-footer -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <!--<button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal">-->
+          <!--关闭-->
+          <!--</button>-->
+          <button type="button" class="btn btn-danger btn-flat" (click)="deleteDynamic()">
+            <i class="fa fa-minus-square"></i> 删除动态
+          </button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 </div>

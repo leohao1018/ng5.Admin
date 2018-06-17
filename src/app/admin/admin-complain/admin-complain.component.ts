@@ -1,21 +1,21 @@
 import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {SocialClassDto} from '../../dto/social-class-dto';
+import {SocialComplainDto} from '../../dto/social-complain-dto';
 import {AppSetting} from '../../app-setting';
 import {HttpInterceptorService} from '../../util/http-interceptor-service.service';
 import {StatusCode} from '../../dto/status-code';
 import {} from 'jquery';
 import {Router} from '@angular/router';
 import {DialogService} from '../../util/dialog-service';
+import {BootstrapModalSize, Modal} from 'ngx-modialog/plugins/bootstrap';
 
 @Component({
-  selector: 'app-admin-classes',
-  templateUrl: './admin-classes.component.html',
+  selector: 'app-admin-report',
+  templateUrl: './admin-complain.component.html',
   styleUrls: []
 })
-
-export class AdminClassesComponent implements OnInit {
-  queryUrl = AppSetting.apiBaseUrl + 'SocialClass/pagingData';
-  deleteUrl = AppSetting.apiBaseUrl + 'SocialClass/deleteLogic';
+export class AdminComplainComponent implements OnInit {
+  queryUrl = AppSetting.apiBaseUrl + 'SocialComplain/pagingData';
+  deleteUrl = AppSetting.apiBaseUrl + 'SocialComplain/deleteLogic';
 
   isShowDataLoading = false;
   isShowLoading = false;
@@ -23,13 +23,20 @@ export class AdminClassesComponent implements OnInit {
 
   @Input('data')
   totalCount = 0;
-  dataArr: SocialClassDto[] = [];
+  dataArr: SocialComplainDto[] = [];
   queryParam = {
     PageIndex: 1,
     PageSize: 10,
     Type: undefined,
     Subject: undefined
   };
+
+  viewComplain: SocialComplainDto;
+  viewDynamicSubject: string;
+  viewDynamicPics: string[];
+  viewDynamicMusics: string[];
+  viewDynamicVideos: string[];
+
 
   initQueryParam(): void {
     this.queryParam = {
@@ -42,7 +49,8 @@ export class AdminClassesComponent implements OnInit {
 
   constructor(private httpClient: HttpInterceptorService,
               private router: Router,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,
+              private modal: Modal) {
   }
 
   ngOnInit() {
@@ -72,35 +80,13 @@ export class AdminClassesComponent implements OnInit {
         return;
       }
       this.totalCount = res.TotalCount;
-      this.dataArr = res.Result as SocialClassDto[];
+      this.dataArr = res.Result as SocialComplainDto[];
       let index = 1;
       this.dataArr.map(x => {
         x.Index = index++;
-        switch (x.Type) {
-          case 1 : {
-            x.TypeString = '诵经';
-            break;
-          }
-          case 2 : {
-            x.TypeString = '打坐';
-            break;
-          }
-          case 3 : {
-            x.TypeString = '持咒';
-            break;
-          }
-          case 4 : {
-            x.TypeString = '抄经';
-            break;
-          }
-          case 5 : {
-            x.TypeString = '念佛';
-            break;
-          }
-          default: {
-            break;
-          }
-        }
+
+        x.IsDynamicDelete = x.Dynamic.LogicallyDelete;
+        x.IsDynamicDeleteStr = x.IsDynamicDelete ? '已删除' : '未删除';
       });
 
       this.isShowLoading = false;
@@ -143,28 +129,6 @@ export class AdminClassesComponent implements OnInit {
     this.queryList();
   }
 
-  /**
-   * 跳转到新增
-   */
-  addNew(): void {
-    this.router.navigateByUrl('/admin/class/info');
-  }
-
-  /**
-   * 编辑
-   */
-  editOne(): void {
-    const selectDataArr = this.dataArr.filter(x => x.Checked);
-    if (selectDataArr.length <= 0) {
-      return;
-    }
-    if (selectDataArr.length > 1) {
-      this.dialogService.showDialog('只能选中一条数据编辑！', null, null);
-      return;
-    }
-    const item = selectDataArr[0];
-    this.router.navigateByUrl('/admin/class/info?id=' + item.Id);
-  }
 
   /**
    * 删除
@@ -188,7 +152,41 @@ export class AdminClassesComponent implements OnInit {
     }, selectDataArr);
   }
 
+  /**
+   * 查看详细
+   * @param $event
+   * @param item
+   */
+  viewDynamicDetail($event, item): void {
+    $event.stopPropagation();
+    this.viewComplain = item;
+
+    this.viewDynamicSubject = item.Dynamic.Subject;
+    this.viewDynamicPics = item.Dynamic.Pics;
+    //
+    // this.viewDynamicMusics = item.Dynamic.Musics;
+    // this.viewDynamicVideos = item.Dynamic.Videos;
+
+    document.getElementById('openModalButton').click();
+  }
+
+  /**
+   * 删除举报的动态
+   */
+  deleteDynamic(): void {
+
+    this.dialogService.showConfirmDialog('确定要删除选中的数据吗！', arr => {
+      const url = AppSetting.apiBaseUrl + 'SocialDynamic/deleteLogic?id=' + this.viewComplain.Dynamic.Id;
+      this.httpClient.getByHttpClient(url).subscribe(res => {
+        if (res.StatusCode === StatusCode.SUCCESS) {
+          this.queryList();
+        }
+      });
+    }, null);
+  }
+
 }
+
 
 
 

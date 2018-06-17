@@ -27,8 +27,9 @@ import {NgxPaginationModule} from 'ngx-pagination';                             
 import {BootstrapModalModule} from 'ngx-modialog/plugins/bootstrap';  // 弹窗模块
 import {ModalModule} from 'ngx-modialog';                             // 弹窗;
 import { AdminSystemDynamicComponent } from './admin-system-dynamic/admin-system-dynamic.component';
-import { AdminAddSystemDynamicComponent } from './admin-system-dynamic/admin-add-system-dynamic/admin-add-system-dynamic.component';
-import {DialogService} from '../util/dialog-service';                 // 弹窗模块封装
+import {DialogService} from '../util/dialog-service'; // 弹窗模块封装
+import {AdminAddSystemDynamicComponent} from './admin-system-dynamic/admin-add-system-dynamic/admin-add-system-dynamic.component';
+import {AdminComplainComponent} from './admin-complain/admin-complain.component';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import {DialogService} from '../util/dialog-service';                 // 弹窗�
     AdminDashboard2Component,
     AdminSystemDynamicComponent,
     AdminAddSystemDynamicComponent,
+    AdminComplainComponent,
     AdminClassesComponent,
     AdminAddClassComponent,
   ],

@@ -74,7 +74,7 @@ export class AdminAddSystemDynamicComponent implements OnInit {
       this.currentAccount = {Id: params['accountId'], AccountName: params['accountName']};
       this.resetPageData();
 
-      this.queryCurrentDynamics();
+      // this.queryCurrentDynamics();
       this.loadPublishAccount();
     });
   }
@@ -319,6 +319,7 @@ export class AdminAddSystemDynamicComponent implements OnInit {
       return;
     }
     this.resetPageData();
+
     this.dialogService.showConfirmDialog('确定要删除选中的数据吗！', arr => {
       this.isCheckedAll = false;
       arr.map(x => {
