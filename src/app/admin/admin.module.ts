@@ -30,6 +30,7 @@ import { AdminSystemDynamicComponent } from './admin-system-dynamic/admin-system
 import {DialogService} from '../util/dialog-service'; // 弹窗模块封装
 import {AdminAddSystemDynamicComponent} from './admin-system-dynamic/admin-add-system-dynamic/admin-add-system-dynamic.component';
 import {AdminComplainComponent} from './admin-complain/admin-complain.component';
+import {AdminDynamicComponent} from './admin-dynamic/admin-dynamic.component';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import {AdminComplainComponent} from './admin-complain/admin-complain.component'
     AdminDashboard2Component,
     AdminSystemDynamicComponent,
     AdminAddSystemDynamicComponent,
+    AdminDynamicComponent,
     AdminComplainComponent,
     AdminClassesComponent,
     AdminAddClassComponent,

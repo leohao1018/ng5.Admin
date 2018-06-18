@@ -21,6 +21,8 @@ export class SocialComplainDto extends BaseDto {
 
   Type: string;
 
+  TypeStrList: string[];
+
   ComplainContent: string;
 
   Dynamic: SocialDynamicDto;

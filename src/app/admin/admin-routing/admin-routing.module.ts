@@ -1,6 +1,6 @@
-import {AdminDashboard2Component} from './../admin-dashboard2/admin-dashboard2.component';
-import {AdminDashboard1Component} from './../admin-dashboard1/admin-dashboard1.component';
-import {AdminComponent} from './../admin.component';
+import {AdminDashboard2Component} from '../admin-dashboard2/admin-dashboard2.component';
+import {AdminDashboard1Component} from '../admin-dashboard1/admin-dashboard1.component';
+import {AdminComponent} from '../admin.component';
 import {NgModule, Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
@@ -9,9 +9,10 @@ import {AdminContentComponent} from '../admin-content/admin-content.component';
 import {AdminClassesComponent} from '../admin-classes/admin-classes.component';
 import {AdminAddClassComponent} from '../admin-classes/admin-add-class/admin-add-class.component';
 import {LoggedInGuard} from '../../login/logged-in-guard';
-import {AdminSystemDynamicComponent} from "../admin-system-dynamic/admin-system-dynamic.component";
-import {AdminAddSystemDynamicComponent} from "../admin-system-dynamic/admin-add-system-dynamic/admin-add-system-dynamic.component";
-import {AdminComplainComponent} from "../admin-complain/admin-complain.component";
+import {AdminSystemDynamicComponent} from '../admin-system-dynamic/admin-system-dynamic.component';
+import {AdminAddSystemDynamicComponent} from '../admin-system-dynamic/admin-add-system-dynamic/admin-add-system-dynamic.component';
+import {AdminComplainComponent} from '../admin-complain/admin-complain.component';
+import {AdminDynamicComponent} from '../admin-dynamic/admin-dynamic.component';
 
 @NgModule({
   imports: [
@@ -58,6 +59,15 @@ import {AdminComplainComponent} from "../admin-complain/admin-complain.component
               {
                 path: 'info',
                 component: AdminAddSystemDynamicComponent
+              }
+            ],
+          },
+          {
+            path: 'userDynamic',
+            children: [
+              {
+                path: 'list',
+                component: AdminDynamicComponent
               }
             ],
           },

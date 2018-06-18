@@ -1,21 +1,24 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy, Renderer2} from '@angular/core';
 import {SocialComplainDto} from '../../dto/social-complain-dto';
 import {AppSetting} from '../../app-setting';
 import {HttpInterceptorService} from '../../util/http-interceptor-service.service';
 import {StatusCode} from '../../dto/status-code';
 import {} from 'jquery';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {DialogService} from '../../util/dialog-service';
 import {BootstrapModalSize, Modal} from 'ngx-modialog/plugins/bootstrap';
+import {ANIMATION_TYPES} from 'ngx-loading';
+import {SocialDynamicDto} from '../../dto/social-dynamic-dto';
+import {UUID} from 'angular2-uuid';
 
 @Component({
   selector: 'app-admin-report',
-  templateUrl: './admin-complain.component.html',
+  templateUrl: './admin-dynamic.component.html',
   styleUrls: []
 })
-export class AdminComplainComponent implements OnInit {
-  queryUrl = AppSetting.apiBaseUrl + 'SocialComplain/pagingData';
-  deleteUrl = AppSetting.apiBaseUrl + 'SocialComplain/deleteLogic';
+export class AdminDynamicComponent implements OnInit {
+  queryUrl = AppSetting.apiBaseUrl + 'SocialDynamic/GetPagingAll';
+  deleteUrl = AppSetting.apiBaseUrl + 'SocialDynamic/deleteLogic';
 
   isShowDataLoading = false;
   isShowLoading = false;
@@ -23,34 +26,29 @@ export class AdminComplainComponent implements OnInit {
 
   @Input('data')
   totalCount = 0;
-  dataArr: SocialComplainDto[] = [];
+  dataArr: SocialDynamicDto[] = [];
   queryParam = {
     PageIndex: 1,
     PageSize: 10,
-    Type: undefined,
-    Subject: undefined
+    Subject: undefined,
+    LogicallyDelete: undefined,
   };
-
-  viewComplain: SocialComplainDto;
+  viewDynamic: SocialDynamicDto;
   viewDynamicSubject: string;
-  viewDynamicPics: string[];
-  viewDynamicMusics: string[];
-  viewDynamicVideos: string[];
-
+  viewDynamicPics: string;
 
   initQueryParam(): void {
     this.queryParam = {
       PageIndex: 1,
       PageSize: 10,
-      Type: undefined,
-      Subject: undefined
+      Subject: undefined,
+      LogicallyDelete: undefined,
     };
   }
 
   constructor(private httpClient: HttpInterceptorService,
               private router: Router,
-              private dialogService: DialogService,
-              private modal: Modal) {
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
@@ -80,43 +78,10 @@ export class AdminComplainComponent implements OnInit {
         return;
       }
       this.totalCount = res.TotalCount;
-      this.dataArr = res.Result as SocialComplainDto[];
+      this.dataArr = res.Result as SocialDynamicDto[];
       let index = 1;
       this.dataArr.map(x => {
         x.Index = index++;
-
-        x.IsDynamicDelete = x.Dynamic.LogicallyDelete;
-        x.IsDynamicDeleteStr = x.IsDynamicDelete ? '已删除' : '未删除';
-        const types = x.Type ? x.Type.split(',') : [];
-        x.TypeStrList = [];
-        types.forEach(function (type) {
-            let typeString = '';
-            if (type === '') {
-              return;
-            }
-            if (type === '0') {
-              typeString = '有害信息';
-            }
-            if (type === '1') {
-              typeString = '垃圾营销';
-            }
-            if (type === '2') {
-              typeString = '违法信息';
-            }
-            if (type === '3') {
-              typeString = '淫秽色情';
-            }
-            if (type === '4') {
-              typeString = '人身攻击';
-            }
-            if (type === '5') {
-              typeString = '其他';
-            }
-
-            x.TypeStrList.push(typeString);
-          }
-        )
-        ;
       });
 
       this.isShowLoading = false;
@@ -159,6 +124,28 @@ export class AdminComplainComponent implements OnInit {
     this.queryList();
   }
 
+  /**
+   * 跳转到新增
+   */
+  addNew(): void {
+    this.router.navigateByUrl('/admin/class/info');
+  }
+
+  /**
+   * 编辑
+   */
+  editOne(): void {
+    const selectDataArr = this.dataArr.filter(x => x.Checked);
+    if (selectDataArr.length <= 0) {
+      return;
+    }
+    if (selectDataArr.length > 1) {
+      this.dialogService.showDialog('只能选中一条数据编辑！', null, null);
+      return;
+    }
+    const item = selectDataArr[0];
+    this.router.navigateByUrl('/admin/class/info?id=' + item.Id);
+  }
 
   /**
    * 删除
@@ -189,31 +176,15 @@ export class AdminComplainComponent implements OnInit {
    */
   viewDynamicDetail($event, item): void {
     $event.stopPropagation();
-    this.viewComplain = item;
+    this.viewDynamic = item;
 
-    this.viewDynamicSubject = item.Dynamic.Subject;
-    this.viewDynamicPics = item.Dynamic.Pics;
+    this.viewDynamicSubject = item.Subject;
+    this.viewDynamicPics = item.Pics;
     //
     // this.viewDynamicMusics = item.Dynamic.Musics;
     // this.viewDynamicVideos = item.Dynamic.Videos;
 
     document.getElementById('openModalButton').click();
-  }
-
-  /**
-   * 删除举报的动态
-   */
-  deleteDynamic(): void {
-
-    this.dialogService.showConfirmDialog('确定要删除选中的数据吗！', arr => {
-      const url = AppSetting.apiBaseUrl + 'SocialDynamic/deleteLogic?id=' + this.viewComplain.Dynamic.Id;
-      this.httpClient.getByHttpClient(url).subscribe(res => {
-        if (res.StatusCode === StatusCode.SUCCESS) {
-          this.queryList();
-          document.getElementById('openModalButton').click();
-        }
-      });
-    }, null);
   }
 
 }
